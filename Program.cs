@@ -9,7 +9,7 @@ class Program
 
         while (true)
         {
-            Console.WriteLine("\n ÖN MUHASEBE ");
+            Console.WriteLine("\n ÖN MUHASEBE UYGULAMASI ");
             Console.WriteLine("1- Cari Ekle");
             Console.WriteLine("2- Cari Sil");
             Console.WriteLine("3- Cari Listesi");
