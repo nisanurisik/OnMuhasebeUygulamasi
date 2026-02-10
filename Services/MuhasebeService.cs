@@ -344,7 +344,20 @@ class MuhasebeService
         Console.Write("Tutarı giriniz: ");
         decimal tutar = decimal.Parse(Console.ReadLine());
 
+        Console.WriteLine("Tahsilat türünü seçiniz:");
+        Console.WriteLine("1 - Nakit");
+        Console.WriteLine("2 - Kart");
+        int secim = int.Parse(Console.ReadLine());
+
+        TahsilatTuru tahsilat = secim == 1 ? TahsilatTuru.Nakit : TahsilatTuru.Kart;
+
         cari.Alacak += tutar;
+
+        if (tahsilat == TahsilatTuru.Nakit)
+        cari.Kasa += tutar;
+
+        else
+            cari.Banka += tutar;
 
         Odemeler.Add(new()
         {
@@ -352,11 +365,12 @@ class MuhasebeService
             CariId = cari.Id,
             CariAdi = cari.Ad,
             Tur = OdemeTuru.Alinan,
+            Tahsilat = tahsilat,
             Tutar = tutar
         });
 
         Console.WriteLine("Ödeme alındı.");
-        Console.WriteLine($"Güncel Durum → Borç: {cari.Borc} | Alacak: {cari.Alacak} | Bakiye: {cari.Bakiye}");
+        Console.WriteLine($"Güncel Durum → Kasa: {cari.Kasa} | Banka: {cari.Banka} | Borç: {cari.Borc} | Alacak: {cari.Alacak} | Bakiye: {cari.Bakiye}");
     }
 
     public void YapilanOdemeGir()
@@ -374,6 +388,13 @@ class MuhasebeService
         Console.Write("Tutarı giriniz: ");
         decimal tutar = decimal.Parse(Console.ReadLine());
 
+        Console.WriteLine("Tahsilat türünü seçiniz:");
+        Console.WriteLine("1 - Nakit");
+        Console.WriteLine("2 - Kart");
+        int secim = int.Parse(Console.ReadLine());
+
+        TahsilatTuru tahsilat = secim == 1 ? TahsilatTuru.Nakit : TahsilatTuru.Kart;
+
         if (tutar > cari.Borc)
         {
             Console.WriteLine("Borçtan fazla ödeme yapılamaz.");
@@ -382,17 +403,28 @@ class MuhasebeService
 
         cari.Borc -= tutar;
 
+        if (tahsilat == TahsilatTuru.Nakit)
+        {
+            cari.Kasa -= tutar;
+        }
+        
+        else
+        {
+            cari.Banka -= tutar;
+        }
+
         Odemeler.Add(new()
         {
             Id = Odemeler.Count + 1,
             CariId = cari.Id,
             CariAdi = cari.Ad,
             Tur = OdemeTuru.Yapilan,
+            Tahsilat = tahsilat,
             Tutar = tutar
         });
 
         Console.WriteLine("Ödeme yapıldı.");
-        Console.WriteLine($"Güncel Durum → Borç: {cari.Borc} | Alacak: {cari.Alacak} | Bakiye: {cari.Bakiye}");
+        Console.WriteLine($"Güncel Durum → Kasa: {cari.Kasa} | Banka: {cari.Banka} | Borç: {cari.Borc} | Alacak: {cari.Alacak} | Bakiye: {cari.Bakiye}");
     }
 
 }
